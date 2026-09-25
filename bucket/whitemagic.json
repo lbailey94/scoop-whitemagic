@@ -1,0 +1,32 @@
+{
+    "version": "9.2.8",
+    "description": "Local-first memory and session continuity for AI agents",
+    "homepage": "https://www.whitemagic.dev",
+    "license": "MIT",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/lbailey94/whitemagic/releases/download/v9.2.8/wm-windows-x86_64.exe",
+            "hash": "604d9dbcdcd658f919bf978420c212299659122345525320625e017c39b220c7"
+        }
+    },
+    "bin": [
+        [
+            "wm-windows-x86_64.exe",
+            "wm"
+        ]
+    ],
+    "checkver": {
+        "github": "https://github.com/lbailey94/whitemagic"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/lbailey94/whitemagic/releases/download/v$version/wm-windows-x86_64.exe"
+            }
+        }
+    },
+    "notes": [
+        "Windows binaries are published but not install-gated; Linux is the gated line.",
+        "Setup guide: https://www.whitemagic.dev/whitemagic/guide"
+    ]
+}
