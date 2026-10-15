@@ -1,12 +1,12 @@
 {
-    "version": "9.2.8",
+    "version": "9.3.4",
     "description": "Local-first memory and session continuity for AI agents",
     "homepage": "https://www.whitemagic.dev",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/lbailey94/whitemagic/releases/download/v9.2.8/wm-windows-x86_64.exe",
-            "hash": "604d9dbcdcd658f919bf978420c212299659122345525320625e017c39b220c7"
+            "url": "https://github.com/lbailey94/whitemagic/releases/download/v9.3.4/wm-windows-x86_64.exe",
+            "hash": "e675c078e5510ef7b77f6d0370a51ec78b3cdabea307026cacf74eb636fb3338"
         }
     },
     "bin": [
