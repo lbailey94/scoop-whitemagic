@@ -37,7 +37,8 @@ jobs:
       - name: Install, check binary and initialize MCP
         shell: pwsh
         run: |
-          scoop install ./bucket/whitemagic.json
+          $manifest = (Resolve-Path .\bucket\whitemagic.json).Path
+          scoop install $manifest
           if ($LASTEXITCODE -ne 0) { throw 'Scoop install failed' }
           $binary = scoop which wm
           if ((& $binary --version) -notmatch '9\.3\.4') { throw 'Wrong binary version' }
