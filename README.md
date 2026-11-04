@@ -5,10 +5,13 @@ scoop bucket add whitemagic https://github.com/lbailey94/scoop-whitemagic
 scoop install whitemagic
 ```
 
-Installs the `wm` binary — local-first memory and session continuity for AI
-agents. Windows binaries are published but not install-gated; Linux x86-64/arm64
-are the gated lines.
+Selects the **stable Gen2 9.3.4 Windows x64** binary with an exact checksum.
+Windows is published but not yet install-qualified in this review. The new workflow
+candidate checks release metadata, then installs on a disposable Windows runner,
+records the executable hash, exercises MCP initialize/tools/list with a scratch
+store, and uninstalls. Local manifest validation does not stand in for that run.
+The workflow does not certify a complete authenticated client or restart journey.
 
-- Product: https://www.whitemagic.dev/whitemagic
-- Setup guide: https://www.whitemagic.dev/whitemagic/guide
-- Source (MIT): https://github.com/lbailey94/whitemagic
+[Setup](https://www.whitemagic.dev/install) ·
+[Stable release](https://github.com/lbailey94/whitemagic/releases/tag/v9.3.4) ·
+[Source](https://github.com/lbailey94/whitemagic)
