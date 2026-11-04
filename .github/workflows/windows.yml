@@ -16,10 +16,12 @@ jobs:
           node-version: '22'
       - run: node --test test/manifest.test.mjs
       - name: Match exact released asset digest
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           expected=$(jq -r '.architecture["64bit"].hash' bucket/whitemagic.json)
-          actual=$(curl -fsSL https://api.github.com/repos/lbailey94/whitemagic/releases/tags/v9.3.4 | jq -r '.assets[]|select(.name=="wm-windows-x86_64.exe")|.digest')
+          actual=$(curl -fsSL -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/lbailey94/whitemagic/releases/tags/v9.3.4 | jq -r '.assets[]|select(.name=="wm-windows-x86_64.exe")|.digest')
           test "$actual" = "sha256:$expected"
   install:
     runs-on: windows-2022
