@@ -1,0 +1,55 @@
+name: Stable Windows manifest and install
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  manifest:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test test/manifest.test.mjs
+      - name: Match exact released asset digest
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          expected=$(jq -r '.architecture["64bit"].hash' bucket/whitemagic.json)
+          actual=$(curl -fsSL -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/lbailey94/whitemagic/releases/tags/v9.3.4 | jq -r '.assets[]|select(.name=="wm-windows-x86_64.exe")|.digest')
+          test "$actual" = "sha256:$expected"
+  install:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Scoop in the disposable runner
+        shell: pwsh
+        run: |
+          Invoke-RestMethod https://get.scoop.sh -OutFile "$env:RUNNER_TEMP\scoop-install.ps1"
+          & "$env:RUNNER_TEMP\scoop-install.ps1" -RunAsAdmin
+          "$env:USERPROFILE\scoop\shims" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+      - name: Install, check binary and initialize MCP
+        shell: pwsh
+        run: |
+          $manifest = (Resolve-Path .\bucket\whitemagic.json).Path
+          scoop install $manifest
+          if ($LASTEXITCODE -ne 0) { throw 'Scoop install failed' }
+          $binary = scoop which wm
+          if ((& $binary --version) -notmatch '9\.3\.4') { throw 'Wrong binary version' }
+          Get-FileHash $binary -Algorithm SHA256
+          node test/mcp-smoke.mjs $binary serve --profile curated
+          if ($LASTEXITCODE -ne 0) { throw 'MCP smoke failed' }
+      - name: Uninstall package
+        if: always()
+        shell: pwsh
+        run: |
+          scoop uninstall whitemagic
+          if ($LASTEXITCODE -ne 0) { throw 'Scoop uninstall failed' }
