@@ -3,15 +3,20 @@
 ```powershell
 scoop bucket add whitemagic https://github.com/lbailey94/scoop-whitemagic
 scoop install whitemagic
+wm --version
 ```
 
-Selects the **stable Gen2 9.3.4 Windows x64** binary with an exact checksum.
-Windows is published but not yet install-qualified in this review. The new workflow
-candidate checks release metadata, then installs on a disposable Windows runner,
-records the executable hash, exercises MCP initialize/tools/list with a scratch
-store, and uninstalls. Local manifest validation does not stand in for that run.
-The workflow does not certify a complete authenticated client or restart journey.
+Expect `wm 9.3.4`. This bucket selects the **stable Gen 2 Windows x64** release.
+To connect a client, use the full path to this binary and `serve --profile curated`.
+Find the installed executable with `Get-Command wm`. See the
+[Gen 2 client instructions](https://www.whitemagic.dev/install#clients) for the
+argument order with an explicit store path.
 
-[Setup](https://www.whitemagic.dev/install) ·
+The Windows CI run installed the package on a GitHub-hosted Windows Server 2022 runner,
+checked the release and executable digests, exercised MCP initialize and tools/list
+in a scratch store, and uninstalled it. The run covers the package and server
+handshake. [Windows install run](https://github.com/lbailey94/scoop-whitemagic/actions/runs/41855165947)
+
+[Windows setup](https://www.whitemagic.dev/install#fallback) ·
 [Stable release](https://github.com/lbailey94/whitemagic/releases/tag/v9.3.4) ·
 [Source](https://github.com/lbailey94/whitemagic)
